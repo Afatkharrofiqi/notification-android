@@ -42,6 +42,17 @@ class MainActivity : AppCompatActivity() {
             cancelNotification()
         }
         createNotificationChannel()
+        setNotificationButtonState(
+            isNotifyEnabled = true,
+            isUpdateEnabled = false,
+            isCancelEnabled = false
+        )
+    }
+
+    fun setNotificationButtonState(isNotifyEnabled: Boolean, isUpdateEnabled: Boolean, isCancelEnabled: Boolean){
+        button_notify.isEnabled = isNotifyEnabled
+        button_update.isEnabled = isUpdateEnabled
+        button_cancel.isEnabled = isCancelEnabled
     }
 
     private fun updateNotification() {
@@ -55,15 +66,30 @@ class MainActivity : AppCompatActivity() {
             )
         }
         mNotifyManager.notify(NOTIFICATION_ID, notifyBuilder.build())
+        setNotificationButtonState(
+            isNotifyEnabled = false,
+            isUpdateEnabled = false,
+            isCancelEnabled = true
+        )
     }
 
     private fun cancelNotification() {
         mNotifyManager.cancel(NOTIFICATION_ID)
+        setNotificationButtonState(
+            isNotifyEnabled = true,
+            isUpdateEnabled = false,
+            isCancelEnabled = false
+        )
     }
 
     fun sendNotification(){
         val notifyBuilder = getNotificationBuilder()
         mNotifyManager.notify(NOTIFICATION_ID, notifyBuilder.build())
+        setNotificationButtonState(
+            isNotifyEnabled = false,
+            isUpdateEnabled = true,
+            isCancelEnabled = true
+        )
     }
 
     fun createNotificationChannel(){
