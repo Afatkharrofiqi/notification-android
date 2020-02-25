@@ -63,6 +63,8 @@ class MainActivity : AppCompatActivity() {
             setSmallIcon(R.drawable.ic_android)
             setContentIntent(notificationPendingIntent)
             setAutoCancel(true)
+            priority = NotificationCompat.PRIORITY_HIGH
+            setDefaults(NotificationCompat.DEFAULT_ALL)
         }
         return notifyBuilder
     }
