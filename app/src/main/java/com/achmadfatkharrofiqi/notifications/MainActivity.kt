@@ -38,9 +38,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         button_cancel.setOnClickListener {
-            // cancel the notification
+            cancelNotification()
         }
         createNotificationChannel()
+    }
+
+    private fun cancelNotification() {
+        mNotifyManager.cancel(NOTIFICATION_ID)
     }
 
     fun sendNotification(){
