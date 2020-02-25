@@ -3,8 +3,10 @@ package com.achmadfatkharrofiqi.notifications
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
@@ -19,12 +21,14 @@ class MainActivity : AppCompatActivity() {
     companion object {
         val PRIMARY_CHANNEL_ID = "primary_notification_channel"
         val NOTIFICATION_ID = 0
+        val ACTION_UPDATE_NOTIFICATION = "com.achmadfatkharrofiqi.notifications.ACTION_UPDATE_NOTIFICATION"
     }
 
     private val button_notify: Button by lazy { btn_notify }
     private val button_update: Button by lazy { btn_update }
     private val button_cancel: Button by lazy { btn_cancel }
     private lateinit var mNotifyManager: NotificationManager
+    private val mReceiver: NotificationReceiver by lazy { NotificationReceiver() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +51,7 @@ class MainActivity : AppCompatActivity() {
             isUpdateEnabled = false,
             isCancelEnabled = false
         )
+        registerReceiver(mReceiver, IntentFilter(ACTION_UPDATE_NOTIFICATION))
     }
 
     fun setNotificationButtonState(isNotifyEnabled: Boolean, isUpdateEnabled: Boolean, isCancelEnabled: Boolean){
@@ -55,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         button_cancel.isEnabled = isCancelEnabled
     }
 
-    private fun updateNotification() {
+    fun updateNotification() {
         val androidImage = BitmapFactory.decodeResource(resources,R.drawable.mascot_1)
         val notifyBuilder = getNotificationBuilder()
         notifyBuilder.apply {
@@ -83,7 +88,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun sendNotification(){
+        val updateIntent = Intent(ACTION_UPDATE_NOTIFICATION)
+        val updatePendingIntent = PendingIntent.getBroadcast(
+            this, NOTIFICATION_ID, updateIntent, PendingIntent.FLAG_ONE_SHOT)
         val notifyBuilder = getNotificationBuilder()
+        notifyBuilder.addAction(R.drawable.ic_update, "Update Notification", updatePendingIntent)
         mNotifyManager.notify(NOTIFICATION_ID, notifyBuilder.build())
         setNotificationButtonState(
             isNotifyEnabled = false,
@@ -123,4 +132,15 @@ class MainActivity : AppCompatActivity() {
         return notifyBuilder
     }
 
+    override fun onDestroy() {
+        unregisterReceiver(mReceiver)
+        super.onDestroy()
+    }
+
+    inner class NotificationReceiver: BroadcastReceiver() {
+
+        override fun onReceive(context: Context?, intent: Intent?) {
+            updateNotification()
+        }
+    }
 }
