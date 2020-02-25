@@ -21,6 +21,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val button_notify: Button by lazy { btn_notify }
+    private val button_update: Button by lazy { btn_update }
+    private val button_cancel: Button by lazy { btn_cancel }
     private lateinit var mNotifyManager: NotificationManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +31,14 @@ class MainActivity : AppCompatActivity() {
 
         button_notify.setOnClickListener {
             sendNotification()
+        }
+
+        button_update.setOnClickListener {
+            // update the notification
+        }
+
+        button_cancel.setOnClickListener {
+            // cancel the notification
         }
         createNotificationChannel()
     }
