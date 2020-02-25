@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         val PRIMARY_CHANNEL_ID = "primary_notification_channel"
+        val NOTIFICATION_ID = 0
     }
 
     private val button_notify: Button by lazy { btn_notify }
@@ -31,6 +32,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun sendNotification(){
+        val notifyBuilder = getNotificationBuilder()
+        mNotifyManager.notify(NOTIFICATION_ID, notifyBuilder.build())
     }
 
     fun createNotificationChannel(){
