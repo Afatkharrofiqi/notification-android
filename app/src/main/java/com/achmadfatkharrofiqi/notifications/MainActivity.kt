@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -30,7 +31,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun sendNotification(){
-
     }
 
     fun createNotificationChannel(){
@@ -46,4 +46,15 @@ class MainActivity : AppCompatActivity() {
             mNotifyManager.createNotificationChannel(notificationChannel)
         }
     }
+
+    private fun getNotificationBuilder(): NotificationCompat.Builder {
+        val notifyBuilder = NotificationCompat.Builder(this, PRIMARY_CHANNEL_ID)
+        notifyBuilder.apply {
+            setContentTitle("You've been notified!")
+            setContentText("This is your notification text.")
+            setSmallIcon(R.drawable.ic_android)
+        }
+        return notifyBuilder
+    }
+
 }
